@@ -1,0 +1,2 @@
+# makes the Bazel functions defined in this package usable by other packages
+package(default_visibility = ["//visibility:public"])
