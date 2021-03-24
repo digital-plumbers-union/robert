@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ping
+  labels:
+    'discord-event': 'true'
+data:
+  match: '^!ping'
+  image: 'docker/whalesay'
+  event: 'message'
