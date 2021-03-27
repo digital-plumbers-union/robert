@@ -13,6 +13,7 @@ workspace(
 # Install the nodejs "bootstrap" package
 # This provides the basic tools for running and packaging nodejs programs in Bazel
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
 http_archive(
     name = "build_bazel_rules_nodejs",
     sha256 = "55a25a762fcf9c9b88ab54436581e671bc9f4f523cb5a1bd32459ebec7be68a8",
@@ -36,7 +37,14 @@ http_archive(
 )
 
 load("@io_bazel_rules_docker//repositories:repositories.bzl", container_repositories = "repositories")
+
 container_repositories()
 
 load("@io_bazel_rules_docker//nodejs:image.bzl", _nodejs_image_repos = "repositories")
+
 _nodejs_image_repos()
+
+# pre-built tooling binary dependencies
+load("//tools/bin:deps.bzl", "install_tools")
+
+install_tools()

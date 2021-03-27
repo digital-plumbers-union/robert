@@ -1,0 +1,46 @@
+load("//tools/bzl:index.bzl", "platforms", "tool")
+
+package(default_visibility = ["//visibility:public"])
+
+# call platforms() to make config_settings for OSX and Linux platforms
+# available to our `tool` macro
+platforms()
+
+# define build targets for all of our binary tools
+tool(
+    name = "fetch_kubectl",
+    outs = ["kubectl"],
+    darwin = "@kubectl_osx//file",
+    k8 = "@kubectl_linux//file",
+    tags = ["manual"],
+)
+
+tool(
+    name = "fetch_buildifier",
+    outs = ["buildifier"],
+    darwin = "@buildifier_osx//file",
+    k8 = "@buildifier_linux//file",
+    tags = ["manual"],
+)
+
+tool(
+    name = "fetch_crane",
+    outs = ["crane"],
+    darwin = "@crane_osx//:file",
+    k8 = "@crane_linux//:file",
+    tags = ["manual"],
+)
+
+filegroup(
+    name = "package-srcs",
+    srcs = glob(["**"]),
+    tags = ["automanaged"],
+    visibility = ["//visibility:private"],
+)
+
+filegroup(
+    name = "all-srcs",
+    srcs = [":package-srcs"],
+    tags = ["automanaged"],
+    visibility = ["//visibility:public"],
+)
