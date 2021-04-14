@@ -1,10 +1,16 @@
 import * as k8s from '@jkcfg/kubernetes/api';
 import * as std from '@jkcfg/std';
-import { resolve } from 'path';
+import * as param from '@jkcfg/std/param';
 
 const labels = {
     app: 'discord-manager'
 };
+
+const params = {
+    image: param.String('image', 'ghcr.io/digital-plumbers-union/robert/discord-manager'),
+    tag: param.String('tag', 'dev'),
+    dir: param.String('port', './generated'),
+  };
 
 const discordManagerDeployment = (image: string) => new k8s.apps.v1.Deployment('discord-manager', {
     metadata: {
@@ -29,4 +35,5 @@ const discordManagerDeployment = (image: string) => new k8s.apps.v1.Deployment('
 });
 
 
-std.write(discordManagerDeployment('test-imag:latest'), resolve(__dirname, 'generated', 'test-discord-manager.yaml'));
+std.write(discordManagerDeployment(`${params.image}:${params.tag}`),  `${params.dir}/test-discord-manager.yaml`);
+console.log('hi');

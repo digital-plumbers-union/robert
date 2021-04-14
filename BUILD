@@ -12,3 +12,8 @@ alias(
     name = "buildifier",
     actual = "//tools/bin:buildifier",
 )
+
+alias(
+    name = "jk",
+    actual = "//tools/bin:jk",
+)

@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+      "target": "es2015",
+      "lib": ["es2017"],
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "moduleResolution": "node",
+      "noEmitOnError": true,
+      "pretty": true,
+      "strict": true,
+      "allowUnreachableCode": false,
+      "allowUnusedLabels": false,
+      "noUnusedLocals": true,
+      "noUnusedParameters": false,
+      "noImplicitReturns": true,
+      "noFallthroughCasesInSwitch": true,
+      "declaration": true,
+      "sourceMap": true,
+      "module": "es6",
+      "baseUrl": ".",
+      "noImplicitAny": false,
+      "strictNullChecks": true,
+    }
+  }
