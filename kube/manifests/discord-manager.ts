@@ -1,5 +1,4 @@
 import * as k8s from '@jkcfg/kubernetes/api';
-import * as std from '@jkcfg/std';
 import * as param from '@jkcfg/std/param';
 
 const labels = {
@@ -9,7 +8,6 @@ const labels = {
 const params = {
     image: param.String('image', 'ghcr.io/digital-plumbers-union/robert/discord-manager'),
     tag: param.String('tag', 'dev'),
-    dir: param.String('port', './generated'),
   };
 
 const discordManagerDeployment = (image: string) => new k8s.apps.v1.Deployment('discord-manager', {
@@ -34,6 +32,7 @@ const discordManagerDeployment = (image: string) => new k8s.apps.v1.Deployment('
     }
 });
 
-
-std.write(discordManagerDeployment(`${params.image}:${params.tag}`),  `${params.dir}/test-discord-manager.yaml`);
-console.log('hi');
+export default [{
+    file: 'discord-manager.yaml',
+    value: discordManagerDeployment(`${params.image}:${params.tag}`)
+}];
