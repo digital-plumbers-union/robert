@@ -34,6 +34,6 @@ container_push(
     format = "Docker",
     image = ":image-build",
     registry = "ghcr.io",
-    repository = "digital-plumbers-union/robert",
+    repository = "digital-plumbers-union/robert/discord-manager",
     tag = "dev",
 )
