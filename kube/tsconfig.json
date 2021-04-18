@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
-      "target": "es2015",
-      "lib": ["es2017"],
+      "allowJs": true,
+      "target": "es2017",
+      "module": "es6",
+      "moduleResolution": "node",
       "allowSyntheticDefaultImports": true,
       "esModuleInterop": true,
       "forceConsistentCasingInFileNames": true,
-      "moduleResolution": "node",
       "noEmitOnError": true,
       "pretty": true,
       "strict": true,
@@ -16,10 +17,9 @@
       "noImplicitReturns": true,
       "noFallthroughCasesInSwitch": true,
       "declaration": true,
-      "sourceMap": true,
-      "module": "es6",
-      "baseUrl": ".",
+      "sourceMap": false,
       "noImplicitAny": false,
       "strictNullChecks": true,
+      "stripInternal": true,
     }
   }

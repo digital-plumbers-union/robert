@@ -1,44 +1,50 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@npm//@bazel/typescript:index.bzl", "ts_library")
-load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
-load("//hack:jkcfg.bzl", "gen_manifests")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary", "js_library")
+load("//hack:jkcfg.bzl", "jk_generate")
 
-exports_files(
-    ["tsconfig.json"],
-    visibility = ["//visibility:public"],
-)
+standard_jk_deps = [
+    "@npm//@dpu/jkcfg-k8s",
+    "@npm//@jkcfg/kubernetes",
+    "@npm//@jkcfg/std",
+    "@npm//@types/node",
+]
 
 ts_library(
     name = "manifests",
-    srcs = glob(["manifests/*.ts"]),
+    srcs = glob(["*.ts"]),
     deps = [
-        "@npm//@dpu/jkcfg-k8s",
         "@npm//@dpu/tekton",
-        "@npm//@jkcfg/kubernetes",
-        "@npm//@jkcfg/std",
-        "@npm//@types/node",
-    ],
+    ] + standard_jk_deps,
     runtime = "node",
     # force ts_library to always produce ES6 compatible outputs because
     # this code will always be consumed by `jk`
     devmode_module = "es2015",
     devmode_target = "es2017",
-    prodmode_module = "es2015",
-    prodmode_target = "es2017",
     tsconfig = "//kube:tsconfig.json",
 )
 
-nodejs_binary(
-    name = "bin",
-    entry_point = ":discord-manager.ts",
-    data = [
-        ":manifests"
-    ],
+filegroup(
+    name = "compiled_manifests",
+    srcs = ["manifests"],
+    output_group = "es5_sources"
 )
 
-gen_manifests(
-    pkg_name="test",
-    dep=":bin",
-    gen_file="kube/manifests/discord-manager.js"
+jk_generate(
+    name="discord-manager-dev",
+    compiled_js=":compiled_manifests",
+    generation_file="discord-manager.js",
+    output_path="generated/discord-manager-dev.yaml",
+    deps = [
+        "@npm//@dpu/jkcfg-k8s",
+        "@npm//@dpu/tekton",
+        "@npm//@jkcfg/kubernetes",
+        "@npm//@jkcfg/std",
+        "@npm//@types/node"
+    ],
+    values = {
+        "tag": "test"
+    },
+    sanity = ":deps"
 )
