@@ -14,6 +14,7 @@ def install_tools():
     install_kubectl()
     install_bazel_tools()
     install_crane()
+    install_jkcfg()
 
 def install_kubectl():
     """Installs kubectl
@@ -93,4 +94,19 @@ filegroup(
 )
 """,
         urls = ["https://github.com/google/go-containerregistry/releases/download/v0.4.1/go-containerregistry_Darwin_x86_64.tar.gz"],
+    )
+
+def install_jkcfg():
+    http_file(
+        name = "jk_osx",
+        sha256 = "e3311fb6ee6d34363484ddd964b8e648fdab35f88feaeacc00c150bd66c16999",
+        executable = 1,
+        urls = ["https://github.com/jkcfg/jk/releases/download/0.4.0/jk-darwin-amd64"],
+    )
+
+    http_file(
+        name = "jk_linux",
+        sha256 = "eb4a833d4aae8fce338b0374fffd0e321fa4641d75170de58491ee2e60d336d0",
+        executable = 1,
+        urls = ["https://github.com/jkcfg/jk/releases/download/0.4.0/jk-linux-amd64"],
     )

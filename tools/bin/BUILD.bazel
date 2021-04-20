@@ -31,6 +31,15 @@ tool(
     tags = ["manual"],
 )
 
+tool(
+    name = "fetch_jk",
+    outs = ["jk"],
+    darwin = "@jk_osx//file",
+    k8 = "@jk_linux//file",
+    tags = ["manual"],
+)
+
+
 filegroup(
     name = "package-srcs",
     srcs = glob(["**"]),

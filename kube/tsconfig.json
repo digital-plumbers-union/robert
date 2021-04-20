@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+      "allowJs": true,
+      "target": "es2017",
+      "module": "es6",
+      "moduleResolution": "node",
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "noEmitOnError": true,
+      "pretty": true,
+      "strict": true,
+      "allowUnreachableCode": false,
+      "allowUnusedLabels": false,
+      "noUnusedLocals": true,
+      "noUnusedParameters": false,
+      "noImplicitReturns": true,
+      "noFallthroughCasesInSwitch": true,
+      "declaration": true,
+      "sourceMap": false,
+      "noImplicitAny": false,
+      "strictNullChecks": true,
+      "stripInternal": true,
+    }
+  }
