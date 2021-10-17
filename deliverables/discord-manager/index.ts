@@ -11,7 +11,7 @@ const client = new Client();
 const inflatedConfig = config.getProperties();
 
 const watcher = new Watch(kc);
-watcher.watch('/api/v1/configmaps', {
+watcher.watch(`/api/v1/namespaces/${config.get('namespace')}/configmaps`, {
     labelSelector: 'discord-event=true'
 }, (type, apiObject: V1ConfigMap) => {
     if (type === 'ADDED') {
@@ -51,7 +51,8 @@ watcher.watch('/api/v1/configmaps', {
 client.on("ready", async () => {
     console.log('running');
     const swamp: any = await client.channels.fetch(inflatedConfig.startupChannel);
-    swamp.send('app server go brrr');
+    swamp.send('poop ha ha');
 });
 
 client.login(inflatedConfig.token);
+console.log("did something");

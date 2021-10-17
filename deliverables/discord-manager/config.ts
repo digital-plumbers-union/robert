@@ -17,6 +17,13 @@ const schema = {
         format: String,
         env: 'DISCORD_BOT_TOKEN',
         default: null as any as string
+    },
+    namespace: {
+        doc: 'namespace where the watcher is running',
+        required: true,
+        format: String,
+        env: 'POD_NAMESPACE',
+        default: null as any as string
     }
 }
 

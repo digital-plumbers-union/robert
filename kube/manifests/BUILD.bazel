@@ -1,0 +1,66 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@npm//@bazel/typescript:index.bzl", "ts_library")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary", "js_library")
+load("//hack:jkcfg.bzl", "jk_generate")
+
+
+standard_jk_deps = [
+    "@npm//@dpu/jkcfg-k8s",
+    "@npm//@jkcfg/kubernetes",
+    "@npm//@jkcfg/std",
+    "@npm//@types/node",
+]
+
+ts_library(
+    name = "manifests",
+    srcs = glob(["*.ts"]),
+    deps = [
+        "@npm//@dpu/tekton",
+    ] + standard_jk_deps,
+    runtime = "node",
+    # force ts_library to always produce ES6 compatible outputs because
+    # this code will always be consumed by `jk`
+    devmode_module = "es2015",
+    devmode_target = "es2017",
+    tsconfig = "//kube:tsconfig.json",
+)
+
+filegroup(
+    name = "compiled_manifests",
+    srcs = ["manifests"],
+    output_group = "es5_sources"
+)
+
+jk_generate(
+    name="discord-manager",
+    compiled_js=":compiled_manifests",
+    generation_file="discord-manager.js",
+    output_path=["discord-manager.yaml"],
+    deps = [
+        "@npm//@dpu/jkcfg-k8s",
+        "@npm//@dpu/tekton",
+        "@npm//@jkcfg/kubernetes",
+        "@npm//@jkcfg/std",
+        "@npm//@types/node"
+    ],
+    sanity = ":deps"
+)
+
+jk_generate(
+    name="discord-manager-sa",
+    compiled_js=":compiled_manifests",
+    generation_file="discord-manager-boiler.js",
+    output_path=[
+        'discord-manager-sa.yaml',
+    ],
+    asOneFile = True,
+    deps = [
+        "@npm//@dpu/jkcfg-k8s",
+        "@npm//@dpu/tekton",
+        "@npm//@jkcfg/kubernetes",
+        "@npm//@jkcfg/std",
+        "@npm//@types/node"
+    ],
+    sanity = ":deps"
+)
