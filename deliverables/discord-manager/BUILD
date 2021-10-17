@@ -1,6 +1,8 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@npm//@bazel/typescript:index.bzl", "ts_library")
+load("@io_bazel_rules_k8s//k8s:objects.bzl", "k8s_objects")
+load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
 
 ts_library(
     name = "compile",
@@ -36,4 +38,28 @@ container_push(
     registry = "ghcr.io",
     repository = "digital-plumbers-union/robert/discord-manager",
     tag = "dev",
+)
+
+k8s_deploy(
+    name = "discord-manager-deployment",
+    # Build images with the same container
+    images = {
+        "ghcr.io/digital-plumbers-union/robert/discord-manager:dev": ":image-build",
+    },
+    # K8s deployment template with a stamping variable to replace
+    template = "//kube/manifests:discord-manager",
+)
+
+
+k8s_deploy(
+    name = "discord-manager-sa",
+    template = "//kube/manifests:discord-manager-sa"
+)
+
+k8s_objects(
+   name = "discord-manager",
+   objects = [
+      ":discord-manager-deployment",
+      ":discord-manager-sa",
+   ]
 )
