@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: discord-token
+data:
+  # You can include additional key value pairs as you do with Opaque Secrets
+  DISCORD_BOT_TOKEN: "%{bot-token}"
