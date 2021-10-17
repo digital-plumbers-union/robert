@@ -1,7 +1,5 @@
-exports_files(
-    ["tsconfig.json"],
-    visibility = ["//visibility:public"],
-)
+package(default_visibility = ["//visibility:public"])
+
 
 alias(
     name = "crane",
@@ -17,3 +15,9 @@ alias(
     name = "jk",
     actual = "//tools/bin:jk",
 )
+
+exports_files(
+    ["tsconfig.json"],
+    visibility = ["//visibility:public"],
+)
+
