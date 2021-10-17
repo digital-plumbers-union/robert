@@ -4,6 +4,7 @@ load("@npm//@bazel/typescript:index.bzl", "ts_library")
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary", "js_library")
 load("//hack:jkcfg.bzl", "jk_generate")
 
+
 standard_jk_deps = [
     "@npm//@dpu/jkcfg-k8s",
     "@npm//@jkcfg/kubernetes",
@@ -32,10 +33,10 @@ filegroup(
 )
 
 jk_generate(
-    name="discord-manager-dev",
+    name="discord-manager",
     compiled_js=":compiled_manifests",
     generation_file="discord-manager.js",
-    output_path="generated/discord-manager-dev.yaml",
+    output_path=["discord-manager.yaml"],
     deps = [
         "@npm//@dpu/jkcfg-k8s",
         "@npm//@dpu/tekton",
@@ -43,8 +44,23 @@ jk_generate(
         "@npm//@jkcfg/std",
         "@npm//@types/node"
     ],
-    values = {
-        "tag": "test"
-    },
+    sanity = ":deps"
+)
+
+jk_generate(
+    name="discord-manager-sa",
+    compiled_js=":compiled_manifests",
+    generation_file="discord-manager-boiler.js",
+    output_path=[
+        'discord-manager-sa.yaml',
+    ],
+    asOneFile = True,
+    deps = [
+        "@npm//@dpu/jkcfg-k8s",
+        "@npm//@dpu/tekton",
+        "@npm//@jkcfg/kubernetes",
+        "@npm//@jkcfg/std",
+        "@npm//@types/node"
+    ],
     sanity = ":deps"
 )

@@ -23,10 +23,25 @@ const discordManagerDeployment = (image: string) => new k8s.apps.v1.Deployment('
                 labels
             },
             spec: {
+                serviceAccount: "discord-manager",
                 containers: [{
                     image,
-                    name: 'manager'
-                }]
+                    name: 'manager',
+                    envFrom: [{
+                        secretRef: {
+                            name: 'discord-token'
+                        }
+                    }],
+                    env: [{
+                        name: 'POD_NAMESPACE',
+                        valueFrom: {
+                            fieldRef: {
+                                fieldPath: 'metadata.namespace'
+                            }
+                        }
+                    }]
+                }],
+                imagePullSecrets: [{ name: 'ghcr-config' }]
             }
         }
     }
