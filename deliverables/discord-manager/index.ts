@@ -30,6 +30,11 @@ watcher.watch(`/api/v1/namespaces/${config.get('namespace')}/configmaps`, {
                             {
                                 name: 'main',
                                 image: apiObject.data!.image,
+                                envFrom: [{
+                                    secretRef: {
+                                        name: 'discord-token'
+                                    }
+                                }],
                                 env: [
                                     {
                                         name: 'CHANNEL',
@@ -37,7 +42,8 @@ watcher.watch(`/api/v1/namespaces/${config.get('namespace')}/configmaps`, {
                                     }
                                 ]
                             }
-                        ] 
+                        ],
+                        imagePullSecrets: [{ name: 'ghcr-config' }]
                     }
                 })
             }

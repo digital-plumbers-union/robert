@@ -13,6 +13,11 @@ const discordManagerRole = new k8s.rbac.v1.Role('discord-manager', {
             apiGroups: [""],
             resources: ["configmaps"],
             verbs: ["get", "list", "watch"]
+        },
+        {
+            apiGroups: [""],
+            resources: ["pods"],
+            verbs: ["create"]
         }
     ]
 });

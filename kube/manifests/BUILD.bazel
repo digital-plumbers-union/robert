@@ -35,7 +35,7 @@ filegroup(
 jk_generate(
     name="discord-manager",
     compiled_js=":compiled_manifests",
-    generation_file="discord-manager.js",
+    generation_file="kube/manifests/discord-manager.js",
     output_path=["discord-manager.yaml"],
     deps = [
         "@npm//@dpu/jkcfg-k8s",
@@ -43,14 +43,13 @@ jk_generate(
         "@npm//@jkcfg/kubernetes",
         "@npm//@jkcfg/std",
         "@npm//@types/node"
-    ],
-    sanity = ":deps"
+    ]
 )
 
 jk_generate(
     name="discord-manager-sa",
     compiled_js=":compiled_manifests",
-    generation_file="discord-manager-boiler.js",
+    generation_file="kube/manifests/discord-manager-boiler.js",
     output_path=[
         'discord-manager-sa.yaml',
     ],
@@ -61,6 +60,5 @@ jk_generate(
         "@npm//@jkcfg/kubernetes",
         "@npm//@jkcfg/std",
         "@npm//@types/node"
-    ],
-    sanity = ":deps"
+    ]
 )
