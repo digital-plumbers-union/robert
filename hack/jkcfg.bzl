@@ -6,7 +6,6 @@ def jk_generate(
     compiled_js,
     generation_file,
     output_path,
-    sanity,
     values = {},
     deps = [],
     asOneFile = False
@@ -29,7 +28,7 @@ def jk_generate(
         tmpl_cmd = tmpl_cmd + ["--stdout"]
 
     tmpl_cmd = tmpl_cmd + [
-        "bazel-out/host/bin/kube/manifests/%s" % generation_file,
+        "bazel-out/host/bin/%s" % generation_file,
     ] + set_args
 
     if asOneFile:
