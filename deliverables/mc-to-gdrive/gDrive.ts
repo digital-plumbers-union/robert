@@ -1,6 +1,9 @@
 import { createReadStream } from 'fs';
 import { drive_v3, google } from 'googleapis';
 
+/**
+ * login as service account. credentials are written locally in file
+ */
 export function serviceAccountLogin(): any {
     return new google.auth.GoogleAuth({
         keyFile: '/secrets/sa.json',
@@ -8,6 +11,13 @@ export function serviceAccountLogin(): any {
       });
 }
 
+/**
+ * upload a new tar to gdrive
+ * @param path local path of tar
+ * @param auth service account auth
+ * @param parentId id of folder to put tar in on gdrive
+ * @param namePrefix name prefix for filename in gdrive
+ */
 export function uploadTar(path: string, auth: any, parentId: string, namePrefix: string): Promise<any> {
     const drive = google.drive({version: 'v3', auth});
     const mimeType = 'application/gzip';
@@ -24,6 +34,10 @@ export function uploadTar(path: string, auth: any, parentId: string, namePrefix:
     })
 }
 
+/**
+ * list all files the service account has access to
+ * @param auth service account auth
+ */
 export async function listTars(auth: any): Promise<{ data: drive_v3.Schema$FileList }> {
     const drive = google.drive({version: 'v3', auth});
     return drive.files.list({
@@ -32,6 +46,11 @@ export async function listTars(auth: any): Promise<{ data: drive_v3.Schema$FileL
     });
 }
 
+/**
+ * delete a given file from gdrive
+ * @param auth service account auth
+ * @param id file id
+ */
 export async function deleteFile(auth: any, id: string):Promise<unknown> {
     const drive = google.drive({version: 'v3', auth});
     return drive.files.delete({
@@ -39,7 +58,11 @@ export async function deleteFile(auth: any, id: string):Promise<unknown> {
         supportsAllDrives: true
     });
 }
-
+/**
+ * Collect old tars and then only maintain the most recent 5
+ * @param auth google service account auth
+ * @param namePrefix standard name prefix for tar file
+ */
 export async function removeOldTars(auth: any, namePrefix: string) {
     const { data } = await listTars(auth);
     if (data.files) {

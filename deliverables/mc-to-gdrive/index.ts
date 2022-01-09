@@ -11,6 +11,8 @@ import { executeRCONCommand } from './rcon';
 
 const sanitySleep = () => new Promise((resolve) => setTimeout(resolve, 15000));
 
+// this file is kind of an obscene cluster fuck but it's fine for what it is
+
 try {
     const client = new Client();
     const kc = new KubeConfig();
@@ -34,13 +36,26 @@ try {
         let passed = true;
         const pods = await coreApi.listNamespacedPod(inflatedConfig.namespace);
         console.log('got pods');
-        const pod = pods.body.items.find(pod => pod.metadata?.name!.startsWith(inflatedConfig.deployment))!;
+        const pod = pods.body.items
+            .find(pod => pod.metadata?.name!.startsWith(inflatedConfig.deployment))!;
         console.log(`pod: ${pod.metadata?.name}`);
         const swamp: any = await client.channels.fetch(inflatedConfig.statusChannel);
         try {
             console.log('executing rcon command');
-            await executeRCONCommand('save-off', kc, inflatedConfig.namespace, pod.metadata?.name!)
-            await executeRCONCommand('save-all', kc, inflatedConfig.namespace, pod.metadata?.name!)
+            await executeRCONCommand(
+                'save-off', 
+                kc, 
+                inflatedConfig.namespace, 
+                pod.metadata?.name!, 
+                inflatedConfig.deployment
+            );
+            await executeRCONCommand(
+                'save-all', 
+                kc, 
+                inflatedConfig.namespace, 
+                pod.metadata?.name!, 
+                inflatedConfig.deployment
+            )
             console.log('building tar')
             await sanitySleep();
             await new Promise((resolve, reject) => tar.pack('/data')
@@ -52,21 +67,32 @@ try {
             const serviceAccountAuth = serviceAccountLogin();
             console.log('logged in');
             console.log('uploading tar');
-            await uploadTar('./data-backup-data.tar.gz', serviceAccountAuth, inflatedConfig.gdriveDirectory, inflatedConfig.backupPrefix)
+            await uploadTar(
+                './data-backup-data.tar.gz', 
+                serviceAccountAuth, 
+                inflatedConfig.gdriveDirectory, 
+                inflatedConfig.backupPrefix
+            )
             unlinkSync('./data-backup-data.tar.gz');
             console.log('cleanup old tars');
             await removeOldTars(serviceAccountAuth, inflatedConfig.backupPrefix);
             console.log('done');
             swamp.send('beep boop tony hawk pro miner has been backed up');
         } catch (e) {
-            console.log('fuck')
+            console.log('fuck');
             console.log(e);
             console.log(JSON.stringify(e, null, 2));
             passed = false;
             await swamp.send('beep boop tony hawk pro miner has NOT been backed up');
         } finally {
             console.log('turning save back on');
-            await executeRCONCommand('save-on', kc, inflatedConfig.namespace, pod.metadata?.name!)
+            await executeRCONCommand(
+                'save-on', 
+                kc, 
+                inflatedConfig.namespace, 
+                pod.metadata?.name!, 
+                inflatedConfig.deployment
+            );
             process.exit(passed ? 0 : 1);
         }
     }

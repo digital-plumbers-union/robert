@@ -77,7 +77,7 @@ const cronSpec = new k8s.batch.v1beta1.CronJob('mc-backup', {
             }
         }
     }
-})
+});
 
 export default [{
     file: 'config.yaml',
