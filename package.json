@@ -29,7 +29,7 @@
     "@dpu/tekton": "^0.5.3",
     "@kubernetes/client-node": "^0.12.0",
     "bent": "^7.3.12",
-    "convict": "^6.0.0",
+    "convict": "^6.2.2",
     "discord.js": "^12.3.1",
     "googleapis": "^92.0.0",
     "gunzip-maybe": "^1.4.2",
